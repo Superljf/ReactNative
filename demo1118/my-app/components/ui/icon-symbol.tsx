@@ -18,7 +18,37 @@ const MAPPING = {
   'paperplane.fill': 'send',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
-} as IconMapping;
+  'arrow.left': 'arrow-back',
+  'arrow.right': 'arrow-forward',
+  'person.fill': 'person',
+  'gear': 'settings',
+  'info.circle': 'info',
+  'exclamationmark.triangle': 'warning',
+  'checkmark.circle': 'check-circle',
+  'xmark.circle': 'cancel',
+  'plus': 'add',
+  'minus': 'remove',
+  'magnifyingglass': 'search',
+  'heart': 'favorite',
+  'heart.fill': 'favorite',
+  'bookmark': 'bookmark-border',
+  'bookmark.fill': 'bookmark',
+  'share': 'share',
+  'link': 'link',
+  'trash': 'delete',
+  'pencil': 'edit',
+  'camera': 'camera',
+  'photo': 'photo',
+  'video': 'videocam',
+  'map': 'map',
+  'calendar': 'calendar-today',
+  'clock': 'schedule',
+  'location': 'location-on',
+  'phone': 'phone',
+  'mail': 'mail',
+  'lock': 'lock',
+  'lock.open': 'lock-open',
+} as unknown as IconMapping;
 
 /**
  * An icon component that uses native SF Symbols on iOS, and Material Icons on Android and web.
@@ -30,6 +60,7 @@ export function IconSymbol({
   size = 24,
   color,
   style,
+  weight,
 }: {
   name: IconSymbolName;
   size?: number;

@@ -1,5 +1,5 @@
 import type { PropsWithChildren, ReactElement } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedRef,
@@ -10,6 +10,7 @@ import Animated, {
 import { ThemedView } from '@/components/themed-view';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { Colors, Spacing } from '@/constants/theme';
 
 const HEADER_HEIGHT = 250;
 
@@ -45,20 +46,24 @@ export default function ParallaxScrollView({
   });
 
   return (
-    <Animated.ScrollView
-      ref={scrollRef}
-      style={{ backgroundColor, flex: 1 }}
-      scrollEventThrottle={16}>
-      <Animated.View
-        style={[
-          styles.header,
-          { backgroundColor: headerBackgroundColor[colorScheme] },
-          headerAnimatedStyle,
-        ]}>
-        {headerImage}
-      </Animated.View>
-      <ThemedView style={styles.content}>{children}</ThemedView>
-    </Animated.ScrollView>
+    <ThemedView style={styles.container}>
+      <Animated.ScrollView
+        ref={scrollRef}
+        style={{ backgroundColor }}
+        scrollEventThrottle={16}>
+        <Animated.View
+          style={[
+            styles.header,
+            { backgroundColor: headerBackgroundColor[colorScheme] },
+            headerAnimatedStyle,
+          ]}>
+          {headerImage}
+        </Animated.View>
+        <View style={styles.contentContainer}>
+          <ThemedView style={styles.content}>{children}</ThemedView>
+        </View>
+      </Animated.ScrollView>
+    </ThemedView>
   );
 }
 
@@ -70,10 +75,27 @@ const styles = StyleSheet.create({
     height: HEADER_HEIGHT,
     overflow: 'hidden',
   },
+  contentContainer: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    marginTop: -20,
+    backgroundColor: Colors.light.groupBackground,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 5,
+  },
   content: {
     flex: 1,
-    padding: 32,
-    gap: 16,
+    padding: Spacing.medium,
+    gap: Spacing.medium,
     overflow: 'hidden',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: Colors.light.secondaryGroupBackground,
   },
 });

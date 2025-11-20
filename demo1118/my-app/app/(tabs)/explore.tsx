@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import { Collapsible } from '@/components/ui/collapsible';
 import { ExternalLink } from '@/components/external-link';
@@ -7,7 +7,8 @@ import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Fonts } from '@/constants/theme';
+import { Fonts, FontSizes } from '@/constants/theme';
+import { IOSButton } from '@/components/ui/ios-button';
 
 export default function TabTwoScreen() {
   return (
@@ -22,74 +23,82 @@ export default function TabTwoScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText
-          type="title"
-          style={{
-            fontFamily: Fonts.rounded,
-          }}>
-          Explore
-        </ThemedText>
+        <ThemedText type="largeTitle">探索</ThemedText>
       </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
+      
+      <ThemedText type="body">这个应用包含了示例代码来帮助你开始。</ThemedText>
+      
+      <Collapsible title="基于文件的路由">
+        <ThemedText type="body">
+          这个应用有两个屏幕:{' '}
+          <ThemedText type="callout">app/(tabs)/index.tsx</ThemedText> 和{' '}
+          <ThemedText type="callout">app/(tabs)/explore.tsx</ThemedText>
         </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
+        <ThemedText type="body">
+          布局文件在 <ThemedText type="callout">app/(tabs)/_layout.tsx</ThemedText>{' '}
+          设置了标签导航器。
         </ThemedText>
         <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
+          <ThemedText type="link">了解更多</ThemedText>
         </ExternalLink>
       </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
+      
+      <Collapsible title="Android, iOS, 和 Web 支持">
+        <ThemedText type="body">
+          你可以在Android, iOS, 和 Web上打开这个项目。要打开Web版本，在运行这个项目的终端中按{' '}
+          <ThemedText type="callout">w</ThemedText>。
         </ThemedText>
+        
+        <View style={styles.buttonContainer}>
+          <IOSButton 
+            title="查看文档" 
+            onPress={() => alert('查看文档')} 
+            variant="secondary" 
+            size="small"
+          />
+        </View>
       </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
+      
+      <Collapsible title="图片">
+        <ThemedText type="body">
+          对于静态图片，你可以使用 <ThemedText type="callout">@2x</ThemedText> 和{' '}
+          <ThemedText type="callout">@3x</ThemedText> 后缀来为不同的屏幕密度提供文件
         </ThemedText>
         <Image
           source={require('@/assets/images/react-logo.png')}
           style={{ width: 100, height: 100, alignSelf: 'center' }}
         />
         <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
+          <ThemedText type="link">了解更多</ThemedText>
         </ExternalLink>
       </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
+      
+      <Collapsible title="浅色和深色模式组件">
+        <ThemedText type="body">
+          这个模板支持浅色和深色模式。{' '}
+          <ThemedText type="callout">useColorScheme()</ThemedText> 钩子让你可以检查
+          用户当前的颜色方案是什么，因此你可以相应地调整UI颜色。
         </ThemedText>
         <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
+          <ThemedText type="link">了解更多</ThemedText>
         </ExternalLink>
       </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful{' '}
-          <ThemedText type="defaultSemiBold" style={{ fontFamily: Fonts.mono }}>
+      
+      <Collapsible title="动画">
+        <ThemedText type="body">
+          这个模板包含了一个动画组件的示例。{' '}
+          <ThemedText type="callout">components/HelloWave.tsx</ThemedText> 组件使用
+          强大的{' '}
+          <ThemedText type="callout" style={{ fontFamily: Fonts.mono }}>
             react-native-reanimated
           </ThemedText>{' '}
-          library to create a waving hand animation.
+          库来创建挥手动画。
         </ThemedText>
         {Platform.select({
           ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
+            <ThemedText type="body">
+              <ThemedText type="callout">components/ParallaxScrollView.tsx</ThemedText>{' '}
+              组件为标题图片提供了视差效果。
             </ThemedText>
           ),
         })}
@@ -108,5 +117,8 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
+  },
+  buttonContainer: {
+    marginTop: 12,
   },
 });

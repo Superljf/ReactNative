@@ -1,5 +1,5 @@
 import { PropsWithChildren, useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -12,7 +12,7 @@ export function Collapsible({ children, title }: PropsWithChildren & { title: st
   const theme = useColorScheme() ?? 'light';
 
   return (
-    <ThemedView>
+    <ThemedView style={styles.container}>
       <TouchableOpacity
         style={styles.heading}
         onPress={() => setIsOpen((value) => !value)}
@@ -22,24 +22,48 @@ export function Collapsible({ children, title }: PropsWithChildren & { title: st
           size={18}
           weight="medium"
           color={theme === 'light' ? Colors.light.icon : Colors.dark.icon}
-          style={{ transform: [{ rotate: isOpen ? '90deg' : '0deg' }] }}
+          style={[styles.icon, { transform: [{ rotate: isOpen ? '90deg' : '0deg' }] }]}
         />
-
-        <ThemedText type="defaultSemiBold">{title}</ThemedText>
+        <ThemedText type="headline" style={styles.title}>
+          {title}
+        </ThemedText>
       </TouchableOpacity>
-      {isOpen && <ThemedView style={styles.content}>{children}</ThemedView>}
+      
+      {isOpen && (
+        <View style={styles.contentContainer}>
+          <ThemedView style={styles.content}>
+            {children}
+          </ThemedView>
+        </View>
+      )}
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#8E8E93',
+    marginHorizontal: -16,
+  },
   heading: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
+  icon: {
+    marginRight: 8,
+  },
+  title: {
+    flex: 1,
+  },
+  contentContainer: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#8E8E93',
   },
   content: {
-    marginTop: 6,
-    marginLeft: 24,
+    padding: 16,
+    paddingTop: 8,
   },
 });
