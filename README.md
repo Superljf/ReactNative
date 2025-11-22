@@ -511,3 +511,244 @@ React Query → caching + retries saved us from writing a lot of custom logic
 FlashList → noticeably smoother than FlatList on heavy screens
 ```
 
+------------------
+
+下面是对你这份《React Native 路由页面设计指南》的 **完整版增强版本**，我会按照「把用户当傻子式写法」进行优化：简单、清晰、实用、可直接复制到团队文档，也适合有 React 经验快速上手 RN Router。
+
+------
+
+# 🚀 React Native 路由页面设计指南（Expo Router 终极简明版）
+
+> 适合：有 React 经验，刚入手 React Native / Expo Router
+>  目标：用最少脑容量掌握 RN 路由 —— “文件结构即路由”
+
+------
+
+# 📌 1. 概述 — Expo Router 是什么？
+
+Expo Router = **React Native 的 Next.js 路由系统**
+ 页面 = 文件
+ 路径 = 文件路径
+ 动态路由 = `[id].tsx`
+ 布局 = `_layout.tsx`
+
+你只要 **在 app 目录里创建文件，就自动有路由**。不需要写 route config。
+
+------
+
+# 📁 2. 文件系统路由（核心原理）
+
+```
+app/
+├── index.tsx              → "/"
+├── profile.tsx            → "/profile"
+├── settings.tsx           → "/settings"
+├── user/
+│   ├── index.tsx          → "/user"
+│   └── [id].tsx           → "/user/123"
+└── (tabs)/                → 路由组，不占 URL
+    ├── index.tsx          → "/"
+    └── settings.tsx       → "/settings"
+```
+
+👉 **你看到什么路径，用户就访问什么路径。
+ 👉 文件夹即页面目录，不需要注册任何路由。**
+
+------
+
+# 🆕 3. 创建新页面（最常用操作）
+
+只要新建一个文件，就自动成为一个页面：
+
+```tsx
+// app/about.tsx  →  /about
+import { View, Text } from 'react-native';
+
+export default function AboutScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>关于我们页面</Text>
+    </View>
+  );
+}
+```
+
+✔ 自动映射 `/about`
+ ✔ 不需要额外配置
+ ✔ 不需要注册路由
+
+------
+
+# 🔢 4. 动态路由（取 URL 参数）
+
+文件名加方括号即可：
+
+```tsx
+// app/user/[id].tsx  → /user/123
+import { useLocalSearchParams } from 'expo-router';
+
+export default function UserScreen() {
+  const { id } = useLocalSearchParams();
+
+  return <Text>用户ID: {id}</Text>;
+}
+```
+
+✔ URL 参数自动解析
+ ✔ 类似 Next.js 的 `[id]`
+
+------
+
+# 🗂 5. 路由组（不改变 URL 的分组方式）
+
+命名以 `(xxx)` 开头的文件夹，即路由组，不会出现在 URL 中：
+
+```
+app/
+├── (auth)/         → 不会写成 /auth/login
+│   ├── login.tsx   → /login
+│   └── signup.tsx  → /signup
+```
+
+👉 **用于权限分组、Tab分组、Auth分组**
+
+------
+
+# 🧱 6. 布局 `_layout.tsx`（相当于页面模板）
+
+### TabLayout 示例：
+
+```tsx
+// app/(tabs)/_layout.tsx
+import { Tabs } from 'expo-router';
+import { Text } from 'react-native';
+
+export default function TabLayout() {
+  return (
+    <Tabs>
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: '首页',
+          tabBarIcon: () => <Text>🏠</Text>,
+        }}
+      />
+
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: '设置',
+          tabBarIcon: () => <Text>⚙️</Text>,
+        }}
+      />
+    </Tabs>
+  );
+}
+```
+
+✔ 这里定义整个分组的导航结构
+ ✔ 各个页面自动成为 Tab
+ ✔ 一次配置，全局通用
+
+------
+
+# 🔗 7. 页面跳转（两种方法）
+
+## 方法 1：使用 `<Link />`（推荐）
+
+```tsx
+import { Link } from 'expo-router';
+import { Text } from 'react-native';
+
+<Link href="/user/123">
+  <Text>查看用户</Text>
+</Link>
+```
+
+类似 HTML `<a>` 或 Next.js `<Link>`。
+
+------
+
+## 方法 2：使用 `router.push()`（点击按钮时跳转）
+
+```tsx
+import { useRouter } from 'expo-router';
+import { TouchableOpacity, Text } from 'react-native';
+
+const router = useRouter();
+
+<TouchableOpacity onPress={() => router.push('/user/123')}>
+  <Text>查看用户</Text>
+</TouchableOpacity>
+```
+
+常用 API：
+
+- `router.push()`    → 正常跳转
+- `router.replace()` → 替换当前页面（登录后）
+- `router.back()`    → 返回
+
+------
+
+# 📨 8. 参数传递
+
+## 发送参数
+
+```ts
+router.push('/user/123?name=张三&age=25');
+```
+
+## 接收参数
+
+```ts
+const { id, name, age } = useLocalSearchParams();
+```
+
+✔ 自动解析
+ ✔ 无需手动处理 query
+
+------
+
+# 🌟 9. 最佳实践（团队规范）
+
+### ✅ 文件名要与业务一致
+
+❌ detail.tsx
+ ✔ order-detail.tsx
+
+### ✅ 每个路由组都应有自己的 `_layout.tsx`
+
+### ✅ 动态 URL（id）必须使用 `[id].tsx`
+
+### ✅ UI 与逻辑分开
+
+如：`components/`、`hooks/`
+
+### ✅ 使用 TypeScript 保证路由参数安全
+
+如：
+
+```ts
+type UserParams = {
+  id: string;
+};
+```
+
+------
+
+# 🎯 总结（有 React 经验必读）
+
+如果你熟悉 React 或 Next.js，那么：
+
+| Next.js           | Expo Router   |
+| ----------------- | ------------- |
+| pages/ 文件路由   | app/ 文件路由 |
+| _app.tsx          | _layout.tsx   |
+| [id].tsx 动态路由 | [id].tsx      |
+| useRouter         | useRouter     |
+| Link              | Link          |
+
+👉 **基本上就是把 Next.js 的路由搬到了 React Native 上。
+ 你只需要记住一个原则：
+ “你写什么结构，路由就是什么结构。”**
+

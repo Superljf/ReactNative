@@ -4,6 +4,7 @@ import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useRouter } from 'expo-router';
+import { Href } from 'expo-router';
 
 // 模拟列表数据
 const mockListData = [
@@ -23,7 +24,9 @@ export default function ListScreen() {
   const renderListItem = ({ item }: { item: typeof mockListData[0] }) => (
     <TouchableOpacity 
       style={styles.listItem}
-      onPress={() => console.log('查看详情', item.id)}
+      onPress={() => {
+        router.push(`/detail/${item.id}` as Href);
+      }}
     >
       <View style={styles.itemContent}>
         <ThemedText type="headline">{item.title}</ThemedText>
